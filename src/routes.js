@@ -3,6 +3,7 @@ import Market from 'pages/Market';
 import ShoppingCart from 'pages/ShoppingCart';
 import { useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { UserContext } from 'common/context/User';
 
 
 
@@ -13,7 +14,9 @@ export default function Router() {
         <BrowserRouter>
         <Switch>
             <Route exact path="/">
-                <Login name={name} setName={setName} balance={balance} setBalance={setBalance} />
+                <UserContext.Provider value={{ name, setName, balance, setBalance }}>
+                <Login />
+                </UserContext.Provider>
             </Route>
             <Route path="/market">
                 <Market />
