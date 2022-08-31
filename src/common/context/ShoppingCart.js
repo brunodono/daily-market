@@ -1,19 +1,20 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 export const ShoppingCartContext = createContext();
 ShoppingCartContext.displayName = "Cart";
 
 export const ShoppingCartProvider = ({ children }) => {
     const [shoppingCart, setShoppingCart] = useState([]);
+    const [amountProducts, setAmountProducts] = useState(0);
     return (
-        <ShoppingCartContext.Provider value={{ shoppingCart, setShoppingCart }}>
+        <ShoppingCartContext.Provider value={{ shoppingCart, setShoppingCart, amountProducts, setAmountProducts }}>
             {children}
         </ShoppingCartContext.Provider>
     )
 }
 
 export const useShoppingCartContext = () => {
-    const { shoppingCart, setShoppingCart} = useContext(ShoppingCartContext);
+    const { shoppingCart, setShoppingCart, amountProducts, setAmountProducts} = useContext(ShoppingCartContext);
 
     function changeQuantity(id, quantity){
         return shoppingCart.map(cartItem => {
@@ -40,8 +41,20 @@ export const useShoppingCartContext = () => {
         }
         setShoppingCart(changeQuantity(id, -1));
     }
+
+    useEffect(()=>{
+        const newAmount = shoppingCart.reduce((counter, product) => 
+        counter + product.quantity, 0);
+        setAmountProducts(newAmount);
+    }, [shoppingCart, setAmountProducts]);
+
     return {
-        shoppingCart, setShoppingCart, addProduct, removeProduct
+        shoppingCart, 
+        setShoppingCart, 
+        addProduct, 
+        removeProduct,
+        amountProducts,
+        setAmountProducts
     }
 
 
