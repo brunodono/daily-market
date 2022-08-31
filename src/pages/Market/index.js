@@ -6,16 +6,19 @@ import {
 import market from './market.json';
 import Product from 'components/Product';
 import NavBar from './NavBar';
+import { useContext } from 'react';
+import { UserContext } from 'common/context/User';
 
 
 function Market() {
+  const { name, balance} = useContext(UserContext);
   return (
     <Container>
       <NavBar />
       <Header>
         <div>
-          <h2> Hello!</h2>
-          <h3> Balance: €$</h3>
+          <h2> Hello {name}! </h2>
+          <h3> Balance: €$ {balance}</h3>
         </div>
         <p>Find the best organic products!</p>
       </Header>

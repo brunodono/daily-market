@@ -1,17 +1,12 @@
 import { Container } from './styles';
-import { memo } from 'react';
+import { memo, useContext } from 'react';
 import { IconButton } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import { ShoppingCartContext } from 'common/context/ShoppingCart'
 
-
-function Product({
-  name,
-  photo,
-  id,
-  price,
-  unity
-}) {
+function Product({ name, photo, id, price, unity }) {
+  const { shoppingCart, setShoppingCart} = useContext( ShoppingCartContext );
   return (
       <Container>
         <div>
@@ -24,9 +19,7 @@ function Product({
           </p>
         </div>
         <div>
-          <IconButton
-            color="secondary"
-          >
+          <IconButton color="secondary">
             <RemoveIcon />
           </IconButton>
           <IconButton>
