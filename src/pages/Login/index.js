@@ -24,7 +24,11 @@ function Login() {
         <InputLabel>
           Balance
         </InputLabel>
-        <Input value={balance} onChange={(event) => setBalance(event.target.value)} type="number" startAdornment={
+        <Input 
+        value={balance} 
+        onChange={(event) => setBalance(event.target.value)} 
+        type="number" 
+        startAdornment={
           <InputAdornment position="start">
             €$
           </InputAdornment>
@@ -34,6 +38,7 @@ function Login() {
       <Button
         variant="contained"
         color="primary"
+        disabled={name.length < 3}
         onClick={() => history.push('/market')}
       >
         Next
