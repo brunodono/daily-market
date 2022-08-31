@@ -1,19 +1,18 @@
 import { Container } from './styles';
-import { memo, useContext } from 'react';
+import { memo } from 'react';
 import { IconButton } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
-import { ShoppingCartContext } from 'common/context/ShoppingCart'
+import { useShoppingCartContext } from 'common/context/ShoppingCart'
 
 function Product({ name, photo, id, price, unity }) {
-  const { shoppingCart, setShoppingCart} = useContext( ShoppingCartContext );
+  const { shoppingCart, addProduct} = useShoppingCartContext();
+  const productInCart = shoppingCart.find(itemCart => itemCart.id === id)
+
   return (
       <Container>
         <div>
-          <img
-            src={`/assets/${photo}.png`}
-            alt={`photo of ${name}`}
-          />
+          <img src={`/assets/${photo}.png`}alt={`photo of ${name}`}/>
           <p>
             {name} - €$ {price?.toFixed(2)} <span>Kg</span>
           </p>
@@ -22,7 +21,8 @@ function Product({ name, photo, id, price, unity }) {
           <IconButton color="secondary">
             <RemoveIcon />
           </IconButton>
-          <IconButton>
+          {productInCart?.quantity || 0}
+          <IconButton onClick={() => addProduct({ name, photo, id, price, unity })}>
             <AddIcon />
           </IconButton>
         </div>
