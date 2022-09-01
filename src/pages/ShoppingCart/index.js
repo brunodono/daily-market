@@ -1,17 +1,20 @@
 import { Button, Snackbar, InputLabel, Select, MenuItem } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
-import { PaymentContext, usePaymentContext } from 'common/context/Payment';
+import { usePaymentContext } from 'common/context/Payment';
 import { useShoppingCartContext } from 'common/context/ShoppingCart';
+import { UserContext } from 'common/context/User';
 import Product from 'components/Product';
-import { useContext, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Container, Back, TotalContainer, PaymentContainer} from './styles';
 
 function ShoppingCart() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const { shoppingCart } = useShoppingCartContext();
+  const { shoppingCart, totalPriceCart, makePurchase } = useShoppingCartContext();
+  const { balance = 0 } = useContext(UserContext);
   const { paymentMethods, paymentMethod, changePaymentMethod } = usePaymentContext();
   const history = useHistory();
+  const total = useMemo(() => balance - totalPriceCart, [balance, totalPriceCart]);
   return (
     <Container>
       <Back onClick={() => history.goBack()} />
@@ -38,25 +41,27 @@ function ShoppingCart() {
       <TotalContainer>
           <div>
             <h2>Total in the Cart: </h2>
-            <span>€$ </span>
+            <span>€$ {totalPriceCart.toFixed(2)}</span>
           </div>
           <div>
             <h2> Balance: </h2>
-            <span> €$ </span>
+            <span> €$ {Number(balance).toFixed(2)} </span>
           </div>
           <div>
             <h2> Total Balance: </h2>
-            <span> €$ </span>
+            <span> €$ {total.toFixed(2)}</span>
           </div>
         </TotalContainer>
       <Button
         onClick={() => {
+          makePurchase();
           setOpenSnackbar(true);
         }}
+        disabled={total < 0 || shoppingCart.length === 0}
         color="primary"
         variant="contained"
       >
-         Buy
+         Make Purchase 
        </Button>
         <Snackbar
           anchorOrigin={

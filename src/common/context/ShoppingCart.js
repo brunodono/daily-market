@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { usePaymentContext } from "./Payment";
+import { UserContext } from "./User";
 
 export const ShoppingCartContext = createContext();
 ShoppingCartContext.displayName = "Cart";
@@ -6,15 +8,33 @@ ShoppingCartContext.displayName = "Cart";
 export const ShoppingCartProvider = ({ children }) => {
     const [shoppingCart, setShoppingCart] = useState([]);
     const [amountProducts, setAmountProducts] = useState(0);
+    const [totalPriceCart, setTotalPriceCart] = useState(0);
     return (
-        <ShoppingCartContext.Provider value={{ shoppingCart, setShoppingCart, amountProducts, setAmountProducts }}>
+        <ShoppingCartContext.Provider 
+        value={{ 
+            shoppingCart, 
+            setShoppingCart, 
+            amountProducts, 
+            setAmountProducts,
+            totalPriceCart,
+            setTotalPriceCart
+            }}>
             {children}
         </ShoppingCartContext.Provider>
     )
 }
 
 export const useShoppingCartContext = () => {
-    const { shoppingCart, setShoppingCart, amountProducts, setAmountProducts} = useContext(ShoppingCartContext);
+    const { 
+        shoppingCart, 
+        setShoppingCart, 
+        amountProducts, 
+        setAmountProducts,
+        totalPriceCart,
+        setTotalPriceCart
+    } = useContext(ShoppingCartContext);
+    const {paymentMethod} = usePaymentContext();
+    const {setBalance} = useContext(UserContext);
 
     function changeQuantity(id, quantity){
         return shoppingCart.map(cartItem => {
@@ -42,11 +62,24 @@ export const useShoppingCartContext = () => {
         setShoppingCart(changeQuantity(id, -1));
     }
 
+    function makePurchase() {
+        setShoppingCart([]);
+        setBalance((currentBalance)=> currentBalance - totalPriceCart)
+
+    }
+
     useEffect(()=>{
-        const newAmount = shoppingCart.reduce((counter, product) => 
-        counter + product.quantity, 0);
-        setAmountProducts(newAmount);
-    }, [shoppingCart, setAmountProducts]);
+        const { newQuantity, newTotal } = shoppingCart.reduce((counter, product) => 
+        ({
+            newQuantity: counter.newQuantity + product.quantity,
+            newTotal: counter.newTotal + (product.price * product.quantity)
+        }), {
+            newQuantity: 0,
+            newTotal: 0
+        });
+        setAmountProducts(newQuantity);
+        setTotalPriceCart(newTotal * paymentMethod.fees);
+    }, [shoppingCart, setAmountProducts, setTotalPriceCart, paymentMethod]);
 
     return {
         shoppingCart, 
@@ -54,8 +87,8 @@ export const useShoppingCartContext = () => {
         addProduct, 
         removeProduct,
         amountProducts,
-        setAmountProducts
+        setAmountProducts,
+        totalPriceCart,
+        makePurchase        
     }
-
-
 }

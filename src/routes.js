@@ -16,10 +16,11 @@ export default function Router() {
                         <Login />
                     </Route>
                     <ShoppingCartProvider>
+                    <PaymentProvider>
                         <Route path="/market">
                             <Market />
                         </Route>
-                        <PaymentProvider>
+                        
                             <Route path="/shoppingcart">
                                 <ShoppingCart />
                             </Route>
