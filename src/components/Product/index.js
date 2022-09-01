@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import { Container } from './styles';
 import { memo } from 'react';
 import { IconButton } from '@material-ui/core';

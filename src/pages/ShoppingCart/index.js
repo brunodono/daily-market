@@ -1,22 +1,43 @@
-import { Button, Snackbar, InputLabel } from '@material-ui/core';
+import { Button, Snackbar, InputLabel, Select, MenuItem } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
-import { useState } from 'react';
+import { PaymentContext, usePaymentContext } from 'common/context/Payment';
+import { useShoppingCartContext } from 'common/context/ShoppingCart';
+import Product from 'components/Product';
+import { useContext, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Container, Back, TotalContainer, PaymentContainer} from './styles';
 
 function ShoppingCart() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const { shoppingCart } = useShoppingCartContext();
+  const { paymentMethods, paymentMethod, changePaymentMethod } = usePaymentContext();
+  const history = useHistory();
   return (
     <Container>
-      <Back />
+      <Back onClick={() => history.goBack()} />
       <h2>
         Shopping Cart
       </h2>
+      {shoppingCart.map(product => (
+        <Product 
+        {...product}
+        key={product.id}
+        />
+      ))}
       <PaymentContainer>
         <InputLabel> Payment Method </InputLabel>
+        <Select value={paymentMethod.id} onChange={(event) => changePaymentMethod(event.target.value)}>
+          {paymentMethods.map((payment)=>(
+            <MenuItem value={payment.id} key={payment.id}>
+            {payment.name}
+            </MenuItem>
+          ))}
+
+        </Select>
       </PaymentContainer>
       <TotalContainer>
           <div>
-            <h2>Total in the Shopping Cart: </h2>
+            <h2>Total in the Cart: </h2>
             <span>€$ </span>
           </div>
           <div>
