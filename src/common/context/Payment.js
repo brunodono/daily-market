@@ -10,7 +10,7 @@ export const PaymentProvider = ({ children }) => {
         fees: 1,
         id: 1
     },{
-        name: "Credit Card",
+        name: "Credit Card (30% fees)",
         fees: 1.3,
         id: 2
     },{

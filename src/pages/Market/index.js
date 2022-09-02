@@ -18,9 +18,9 @@ function Market() {
       <Header>
         <div>
           <h2> Hello {name}! </h2>
-          <h3> Balance: €$ {balance.toFixed(2)}</h3>
+          <h3> Balance: €$ {balance}</h3>
         </div>
-        <p>Find the best organic products!</p>
+        <p>In Daily Market you will find the best organic products!</p>
       </Header>
       <List>
         <h2>
