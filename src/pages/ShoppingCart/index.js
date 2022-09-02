@@ -80,7 +80,7 @@ function ShoppingCart() {
             onClose={() => setOpenSnackbar(false)}
             severity="success"
           >
-             Your order has been done successfully.
+             Your order has been successfully processed.
           </MuiAlert>
         </Snackbar>
     </Container>
