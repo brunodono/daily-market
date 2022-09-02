@@ -4,15 +4,16 @@ import { Input, InputLabel, InputAdornment } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { UserContext } from 'common/context/User';
 import { useContext } from 'react';
+import { ReactComponent as Logo } from 'assets/logo.svg';
 
 function Login() {
   const history = useHistory();
   const { name, setName, balance, setBalance } = useContext(UserContext);
   return (
     <Container>
-
+    <Logo />
       <Title>
-        Enter your name
+        Enter your name and your balance
       </Title>
       <InputContainer>
         <InputLabel>

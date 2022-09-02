@@ -7,6 +7,7 @@ import Product from 'components/Product';
 import { useContext, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Container, Back, TotalContainer, PaymentContainer} from './styles';
+import { ReactComponent as Logo } from 'assets/logo.svg';
 
 function ShoppingCart() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -17,6 +18,8 @@ function ShoppingCart() {
   const total = useMemo(() => balance - totalPriceCart, [balance, totalPriceCart]);
   return (
     <Container>
+      <Logo />
+      
       <Back onClick={() => history.goBack()} />
       <h2>
         Shopping Cart
